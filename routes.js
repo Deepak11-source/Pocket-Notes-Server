@@ -23,18 +23,23 @@ const connectDb = async () => {
 };
 
 const formatDate = (date) => {
-  const options = { day: 'numeric', month: 'short', year: 'numeric' };
-  return date.toLocaleDateString('en-GB', options).replace(/ /g, ' ');
+  const options = { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'Asia/Kolkata' };
+  return new Intl.DateTimeFormat('en-GB', options).format(date).replace(/ /g, ' ');
 };
 
 const formatTime = (date) => {
-  let hours = date.getHours();
-  const minutes = date.getMinutes();
-  const ampm = hours >= 12 ? 'PM' : 'AM';
-  hours = hours % 12;
-  hours = hours ? hours : 12; // Convert 0 to 12 for midnight
-  return `${hours}:${minutes < 10 ? '0' : ''}${minutes} ${ampm}`;
+  const options = { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true, timeZone: 'Asia/Kolkata' };
+  const formatter = new Intl.DateTimeFormat('en-GB', options);
+  const parts = formatter.formatToParts(date);
+  
+  // Extract hours, minutes, and AM/PM from formatted parts
+  const hours = parts.find(part => part.type === 'hour').value;
+  const minutes = parts.find(part => part.type === 'minute').value;
+  const ampm = parts.find(part => part.type === 'dayPeriod').value;
+
+  return `${hours}:${minutes} ${ampm}`;
 };
+
 
 
 const NoteSchema = new mongoose.Schema({
