@@ -25,12 +25,15 @@ const connectDb = async () => {
 const NoteSchema = new mongoose.Schema({
   content: { type: String, required: true },
   date: {
-    type: String,
-    require:true
+    type: String, 
+    required: true,
+    default: Date.now, 
   },
   createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 });
+
 const Note = mongoose.model("Note", NoteSchema);
+
 
 const NoteGroupSchema = new mongoose.Schema(
   {
