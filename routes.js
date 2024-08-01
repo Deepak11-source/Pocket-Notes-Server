@@ -24,16 +24,17 @@ const connectDb = async () => {
 
 const formatDate = (date) => {
   const options = { day: 'numeric', month: 'short', year: 'numeric' };
-  const formattedDate = date.toLocaleDateString('en-GB', options).replace(/ /g, ' ');
+  return date.toLocaleDateString('en-GB', options).replace(/ /g, ' ');
+};
+
+const formatTime = (date) => {
   let hours = date.getHours();
   const minutes = date.getMinutes();
   const ampm = hours >= 12 ? 'PM' : 'AM';
   hours = hours % 12;
-  hours = hours ? hours : 12; 
-  const formattedTime = `${hours}:${minutes < 10 ? '0' : ''}${minutes} ${ampm}`;
-  return `${formattedDate} ${formattedTime}`;
+  hours = hours ? hours : 12; // Convert 0 to 12 for midnight
+  return `${hours}:${minutes < 10 ? '0' : ''}${minutes} ${ampm}`;
 };
-
 
 
 const NoteSchema = new mongoose.Schema({
@@ -41,7 +42,12 @@ const NoteSchema = new mongoose.Schema({
   date: {
     type: String, 
     required: true,
-    default: () => formatDate(new Date()),
+    default: () => formatDate(new Date()), 
+  },
+  time: {
+    type: String, 
+    required: true,
+    default: () => formatTime(new Date()), 
   },
   createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 });
