@@ -42,12 +42,12 @@ const NoteSchema = new mongoose.Schema({
   date: {
     type: String, 
     required: true,
-    default: () => formatDate(new Date()), 
+    default: function() { return formatDate(new Date()); }, 
   },
   time: {
     type: String, 
     required: true,
-    default: () => formatTime(new Date()), 
+    default: function() { return formatTime(new Date()); },
   },
   createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 });
