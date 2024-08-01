@@ -22,12 +22,20 @@ const connectDb = async () => {
   }
 };
 
+const formatDate = (date) => {
+  const dd = String(date.getDate()).padStart(2, '0');
+  const mm = String(date.getMonth() + 1).padStart(2, '0'); 
+  const yyyy = date.getFullYear();
+  return `${dd}-${mm}-${yyyy}`; // Properly format the string using backticks
+};
+
+
 const NoteSchema = new mongoose.Schema({
   content: { type: String, required: true },
   date: {
     type: String, 
     required: true,
-    default: Date.now, 
+    default: () => formatDate(new Date()),
   },
   createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 });
