@@ -23,11 +23,17 @@ const connectDb = async () => {
 };
 
 const formatDate = (date) => {
-  const dd = String(date.getDate()).padStart(2, '0');
-  const mm = String(date.getMonth() + 1).padStart(2, '0'); 
-  const yyyy = date.getFullYear();
-  return `${dd}-${mm}-${yyyy}`; // Properly format the string using backticks
+  const options = { day: 'numeric', month: 'short', year: 'numeric' };
+  const formattedDate = date.toLocaleDateString('en-GB', options).replace(/ /g, ' ');
+  let hours = date.getHours();
+  const minutes = date.getMinutes();
+  const ampm = hours >= 12 ? 'pm' : 'am';
+  hours = hours % 12;
+  hours = hours ? hours : 12; 
+  const formattedTime = `${hours}:${minutes < 10 ? '0' : ''}${minutes} ${ampm}`;
+  return `${formattedDate} ${formattedTime}`;
 };
+
 
 
 const NoteSchema = new mongoose.Schema({
